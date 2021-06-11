@@ -10,9 +10,7 @@ export class PhpRegistryCheckerService extends RegistryCheckerService {
       const versions = response.data.packages[packageName];
       latestVersion = versions[0].version;
       return latestVersion || '';
-    } catch (error) {
-      //   console.log('error', error);
-    }
+    } catch (error) {}
     return '';
   }
 }

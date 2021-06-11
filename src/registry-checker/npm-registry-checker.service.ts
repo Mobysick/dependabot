@@ -10,9 +10,7 @@ export class NpmRegistryCheckerService extends RegistryCheckerService {
       const versions = Object.keys(response.data.time);
       latestVersion = versions.pop();
       return latestVersion || '';
-    } catch (error) {
-      // console.log('error', error);
-    }
+    } catch (error) {}
     return '';
   }
 }

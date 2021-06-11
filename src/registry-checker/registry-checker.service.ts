@@ -1,7 +1,8 @@
+import { ComparedPackageDto } from './dto/compared-package.dto';
 export abstract class RegistryCheckerService {
   abstract getLatestVersion(packageName: string): Promise<string>;
 
-  public isOutdated(repoVersion: string, latestVersion: string) {
+  public isOutdated(repoVersion: string, latestVersion: string): ComparedPackageDto | false {
     const repo = this.formatVersion(repoVersion);
     const latest = this.formatVersion(latestVersion);
     const isWanted = repo === latest;

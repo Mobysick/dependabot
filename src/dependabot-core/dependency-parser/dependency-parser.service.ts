@@ -1,4 +1,4 @@
-import { Dependency } from './dependency.dto';
+import { Dependency } from './types/dependency.type';
 
 export interface DependencyParserService {
   // TODO: Fix any.

@@ -1,5 +1,5 @@
 import { DependencyParserService } from './dependency-parser.service';
-import { Dependency } from './dependency.dto';
+import { Dependency } from './types/dependency.type';
 
 export class PhpDependencyParserService implements DependencyParserService {
   // TODO: Fix any.

@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import schedule from 'node-schedule';
 import { DependencyParserFactory } from '../dependabot-core/dependency-parser/dependency-parser.factory';
 import { FileParserFactory } from '../dependabot-core/file-parser/file-parser.factory';
-import { OutdatedPackageDto } from '../dependabot-core/registry-checker/dto/outdated-package.dto';
 import { RegistryCheckerFactory } from '../dependabot-core/registry-checker/registry-checker.factory';
+import { OutdatedPackage } from '../dependabot-core/registry-checker/types/outdated-package.type';
 import { RepoCheckerFactory } from '../dependabot-core/repo-checker/repo-checker.factory';
 import { RepoCheckerService } from '../dependabot-core/repo-checker/repo-checker.service';
 import { CreateRepoCheckerParams } from '../dependabot-core/repo-checker/types/create-repo-checker-params.type';
@@ -19,57 +19,57 @@ export class DependabotService {
   constructor(private emailService: SmtpService) {}
 
   async checkRepo(dto: RepoCheckReqDto) {
-    const outdatedDependencies = await this.sendReport(dto);
+    const outdatedDependencies = await this.getOutdatedDependencies({
+      user: dto.user,
+      repo: dto.repo,
+    });
 
     if (dto.subscribe) {
-      // TODO: Schedule.
       this.subscribe(dto);
     }
 
     return new RepoCheckResDto(outdatedDependencies);
   }
 
-  private async subscribe(dto: RepoCheckReqDto) {
-    // const id = `${dto.user}-${dto.repo}-${dto?.emails?.join('-')}`;
+  private getNextScheduledMailDate(): Date {
     const date = new Date();
     date.setMinutes(date.getMinutes() + 1);
     // date.setDate(date.getDate() + 1);
-    schedule.scheduleJob(date, () => {
+    return date;
+  }
+
+  // Use redis based bull queue and add delayed jobs in prod.
+  private async subscribe(dto: RepoCheckReqDto) {
+    schedule.scheduleJob(this.getNextScheduledMailDate(), () => {
       this.sendReport(dto);
       this.subscribe(dto);
     });
   }
 
-  private async sendReport(dto: RepoCheckReqDto): Promise<OutdatedPackageDto[]> {
+  private async sendReport(dto: RepoCheckReqDto): Promise<OutdatedPackage[]> {
+    const { user, repo, emails } = dto;
     const outdatedDependencies = await this.getOutdatedDependencies({
-      user: dto.user,
-      repo: dto.repo,
+      user,
+      repo,
     });
-    // TODO: Uncomment before release.
-    console.log(this.emailService);
-    // if (dto.emails?.length) {
-    //   await Promise.all(
-    //     dto.emails?.map((email) =>
-    //       this.emailService.sendRepoStatus({
-    //         to: email,
-    //         repoName: dto.repo,
-    //         repoUser: dto.user,
-    //         outdatedDependencies,
-    //       }),
-    //     ),
-    //   );
-    // }
+    await Promise.all(
+      emails.map((email) =>
+        this.emailService.sendRepoStatus({
+          to: email,
+          repoName: repo,
+          repoUser: user,
+          outdatedDependencies,
+        }),
+      ),
+    );
     return outdatedDependencies;
   }
 
-  private async getOutdatedDependencies(
-    dto: CreateRepoCheckerParams,
-  ): Promise<OutdatedPackageDto[]> {
+  private async getOutdatedDependencies(dto: CreateRepoCheckerParams): Promise<OutdatedPackage[]> {
     const repoCheckerService: RepoCheckerService = RepoCheckerFactory.getService(
       RepoOption.GITHUB,
       dto,
     );
-
     const { language, content } = await repoCheckerService.fetchDependencyContent();
 
     if (!content) {
@@ -84,11 +84,11 @@ export class DependabotService {
 
     const registryChecker = RegistryCheckerFactory.getService(language);
 
-    // TODO: Review.
     const latestVersions = await Promise.all(
       dependencyList.map((dependency) => registryChecker.getLatestVersion(dependency.key)),
     );
-    const outdatedPackages: OutdatedPackageDto[] = [];
+    // TODO: Review.
+    const outdatedPackages: OutdatedPackage[] = [];
     for (let i = 0; i < dependencyList.length; i++) {
       const dependency = dependencyList[i];
       const latestVersion = latestVersions[i];

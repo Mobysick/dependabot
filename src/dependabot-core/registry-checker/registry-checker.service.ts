@@ -1,8 +1,9 @@
-import { ComparedPackageDto } from './dto/compared-package.dto';
+import { ComparedPackage } from './types/compared-package.type';
+
 export abstract class RegistryCheckerService {
   abstract getLatestVersion(packageName: string): Promise<string>;
 
-  public isOutdated(repoVersion: string, latestVersion: string): ComparedPackageDto | false {
+  public isOutdated(repoVersion: string, latestVersion: string): ComparedPackage | false {
     const repo = this.formatVersion(repoVersion);
     const latest = this.formatVersion(latestVersion);
     const isWanted = repo === latest;
@@ -13,7 +14,9 @@ export abstract class RegistryCheckerService {
   }
 
   private formatVersion(version: string): string {
-    const operatorsToIgnore = ['~', '^', '=', '<', '>', '*', 'v'];
+    // TODO: Review rules.
+    // const operatorsToIgnore = ['~', '^', '=', '<', '>', '*', 'v'];
+    const operatorsToIgnore = ['^', '=', '>', 'v'];
     return version
       .split('')
       .filter((char) => !operatorsToIgnore.includes(char))

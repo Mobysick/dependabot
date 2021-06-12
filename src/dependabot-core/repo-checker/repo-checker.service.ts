@@ -1,11 +1,11 @@
-import axios from 'axios';
 import { ApiErrorMessage } from '../../error/api-error-message';
 import { BadRequestError } from '../../error/exceptions/bad-request.error';
+import { NotFoundError } from '../../error/exceptions/not-found.error';
+import { HttpApi } from '../../http/http-api';
 import { CreateRepoCheckerParams } from './types/create-repo-checker-params.type';
 import { DependencyLanguage } from './types/dependency-language.type';
 import { FetchedDependencyContent } from './types/fetched-dependency-content.type';
 import { LanguageOption } from './types/language-option.enum';
-import { NotFoundError } from '../../error/exceptions/not-found.error';
 
 export abstract class RepoCheckerService {
   protected user: string;
@@ -33,7 +33,7 @@ export abstract class RepoCheckerService {
 
   async fetchDependencyContent(): Promise<FetchedDependencyContent> {
     try {
-      await axios.get(this.getRepoUrl());
+      await HttpApi.get(this.getRepoUrl());
     } catch (error) {
       throw new NotFoundError(ApiErrorMessage.REPOSITORY_NOT_FOUND);
     }
@@ -42,7 +42,7 @@ export abstract class RepoCheckerService {
       const { language, dependencyFile } = langOption;
       const url = this.getPackageFileUrl(dependencyFile);
       try {
-        const response = await axios.get(url);
+        const response = await HttpApi.get(url);
         if (response.status === 200) {
           return {
             language,

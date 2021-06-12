@@ -1,5 +1,7 @@
-import { DependencyParserService } from '../dependency-parser/dependency-parser.service';
-import { LanguageOption } from '../repo-checker/language-option.enum';
+import { LanguageOption } from '../../dependabot-core/repo-checker/types/language-option.enum';
+import { ApiErrorMessage } from '../../error/api-error-message';
+import { BadRequestError } from '../../error/exceptions/bad-request.error';
+import { DependencyParserService } from './dependency-parser.service';
 import { NodeDependencyParserService } from './node-dependency-parser.service';
 import { PhpDependencyParserService } from './php-dependency-parser.service';
 
@@ -13,7 +15,7 @@ export class DependencyParserFactory {
         return new PhpDependencyParserService();
       }
       default: {
-        throw new Error('Language option not supported');
+        throw new BadRequestError(ApiErrorMessage.LANGUAGE_NOT_SUPPORTED);
       }
     }
   }

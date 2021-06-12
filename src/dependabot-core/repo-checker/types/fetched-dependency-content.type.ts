@@ -1,5 +1,6 @@
 import { LanguageOption } from './language-option.enum';
-export interface Language {
+
+export type FetchedDependencyContent = {
   language: LanguageOption;
-  dependencyFile: string;
-}
+  content?: string;
+};

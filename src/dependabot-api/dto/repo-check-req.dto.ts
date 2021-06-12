@@ -1,18 +1,18 @@
-import { IsArray, IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class RepoCheckReqDto {
   @IsString()
   @IsNotEmpty()
-  user: string | undefined;
+  user!: string;
 
   @IsString()
   @IsNotEmpty()
-  repo: string | undefined;
+  repo!: string;
 
   @IsArray()
-  @IsString({ each: true })
+  @IsEmail({}, { each: true })
   @IsNotEmpty({ each: true })
-  emails: string[] | undefined;
+  emails!: string[];
 
   @IsBoolean()
   @IsOptional()

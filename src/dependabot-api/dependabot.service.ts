@@ -45,18 +45,20 @@ export class DependabotService {
       user: dto.user,
       repo: dto.repo,
     });
-    if (dto.emails?.length) {
-      await Promise.all(
-        dto.emails?.map((email) =>
-          this.emailService.sendRepoStatus({
-            to: email,
-            repoName: dto.repo,
-            repoUser: dto.user,
-            outdatedDependencies,
-          }),
-        ),
-      );
-    }
+    // TODO: Uncomment before release.
+    console.log(this.emailService);
+    // if (dto.emails?.length) {
+    //   await Promise.all(
+    //     dto.emails?.map((email) =>
+    //       this.emailService.sendRepoStatus({
+    //         to: email,
+    //         repoName: dto.repo,
+    //         repoUser: dto.user,
+    //         outdatedDependencies,
+    //       }),
+    //     ),
+    //   );
+    // }
     return outdatedDependencies;
   }
 

@@ -8,7 +8,9 @@ export class GithubRepoCheckerService extends RepoCheckerService {
     super(dto);
   }
 
-  // TODO: check repo url
+  getRepoUrl(): string {
+    return `https://api.github.com/repos/${this.user}/${this.repo}`;
+  }
 
   getPackageFileUrl(fileName: string): string {
     return `https://api.github.com/repos/${this.user}/${this.repo}/contents/${fileName}`;

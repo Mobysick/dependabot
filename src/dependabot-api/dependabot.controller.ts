@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { DependabotService } from './dependabot.service';
 import { RepoCheckReqDto } from './dto/repo-check-req.dto';
-import { RepoCheckResDto } from './dto/repo-check-res-dto';
+import { RepoCheckResDto } from './dto/repo-check-res.dto';
 
 @Controller('repo-check')
 export class DependabotController {

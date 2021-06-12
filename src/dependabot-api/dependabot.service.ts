@@ -12,7 +12,7 @@ import { SmtpService } from '../email/smtp.service';
 import { ApiErrorMessage } from '../error/api-error-message';
 import { NotFoundError } from '../error/exceptions/not-found.error';
 import { RepoCheckReqDto } from './dto/repo-check-req.dto';
-import { RepoCheckResDto } from './dto/repo-check-res-dto';
+import { RepoCheckResDto } from './dto/repo-check-res.dto';
 
 @Injectable()
 export class DependabotService {

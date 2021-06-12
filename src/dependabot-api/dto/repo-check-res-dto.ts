@@ -1,4 +1,4 @@
-import { OutdatedPackageDto } from '../../dependabot-core/registry-checker/dto/outdated-package.dto';
+import { OutdatedPackage } from '../../dependabot-core/registry-checker/types/outdated-package.type';
 
 export enum RepoStatus {
   OUTDATED = 'OUTDATED',
@@ -7,9 +7,9 @@ export enum RepoStatus {
 
 export class RepoCheckResDto {
   status: RepoStatus;
-  outDatedPackages: OutdatedPackageDto[];
+  outDatedPackages: OutdatedPackage[];
 
-  constructor(outDatedPackages: OutdatedPackageDto[]) {
+  constructor(outDatedPackages: OutdatedPackage[]) {
     if (outDatedPackages.length) {
       this.status = RepoStatus.OUTDATED;
     } else {

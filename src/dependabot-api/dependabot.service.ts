@@ -38,12 +38,14 @@ export class DependabotService {
     return date;
   }
 
-  // Use redis based bull queue and add delayed jobs in prod.
+  // Use redis based queue e.g. bull queue and add delayed jobs in prod.
   private async subscribe(dto: RepoCheckReqDto) {
-    schedule.scheduleJob(this.getNextScheduledMailDate(), () => {
+    const date = this.getNextScheduledMailDate();
+    schedule.scheduleJob(date, () => {
       this.sendReport(dto);
       this.subscribe(dto);
     });
+    console.log(`Scheduled job for: ${date.toISOString()}`, dto);
   }
 
   private async sendReport(dto: RepoCheckReqDto): Promise<OutdatedPackage[]> {
@@ -76,14 +78,17 @@ export class DependabotService {
       throw new NotFoundError(ApiErrorMessage.DEPENDENCY_FILE_NOT_FOUND);
     }
 
+    console.log('Parsing dependencies...');
     const fileParser = FileParserFactory.getParser(language);
     const fileContentObject = await fileParser.parse(content);
 
     const dependencyParser = DependencyParserFactory.getParser(language);
     const dependencyList = dependencyParser.parse(fileContentObject);
+    console.log(`Parsed ${dependencyList.length} dependencies`);
 
     const registryChecker = RegistryCheckerFactory.getService(language);
 
+    console.log(`Fetching latest versions...`);
     const latestVersions = await Promise.all(
       dependencyList.map((dependency) => registryChecker.getLatestVersion(dependency.key)),
     );
@@ -101,6 +106,9 @@ export class DependabotService {
         });
       }
     }
+
+    console.log(`${outdatedPackages.length} of ${dependencyList.length} dependencies are outdated`);
+    console.log(outdatedPackages);
 
     return outdatedPackages;
   }

@@ -8,6 +8,11 @@ export class NodeDependencyParserService implements DependencyParserService {
       key,
       version: data.dependencies[key],
     }));
-    return keys;
+    return keys.concat(
+      Object.keys(data.devDependencies).map((key) => ({
+        key,
+        version: data.devDependencies[key],
+      })),
+    );
   }
 }

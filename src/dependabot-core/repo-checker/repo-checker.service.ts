@@ -32,8 +32,10 @@ export abstract class RepoCheckerService {
   protected abstract getPackageFileUrl(fileName: string): string;
 
   async fetchDependencyContent(): Promise<FetchedDependencyContent> {
+    console.log('Checking repository...');
     try {
       await HttpApi.get(this.getRepoUrl());
+      console.log(`Found repository: ${this.user}/${this.repo}`);
     } catch (error) {
       throw new NotFoundError(ApiErrorMessage.REPOSITORY_NOT_FOUND);
     }
@@ -44,6 +46,7 @@ export abstract class RepoCheckerService {
       try {
         const response = await HttpApi.get(url);
         if (response.status === 200) {
+          console.log(`Found package file: ${dependencyFile} for language: ${language}`);
           return {
             language,
             content: Buffer.from(response.data.content, response.data.encoding).toString(),

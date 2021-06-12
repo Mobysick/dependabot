@@ -1,5 +1,5 @@
 import { NodeDependencyParserService } from './node-dependency-parser.service';
-import { Dependency } from '../../../dist/dependency-parser/dependency.dto';
+import { Dependency } from './types/dependency.type';
 
 describe('NodeDependencyParserService', () => {
   describe('parse', () => {

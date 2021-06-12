@@ -1,5 +1,5 @@
-import { Dependency } from '../../../dist/dependency-parser/dependency.dto';
 import { PhpDependencyParserService } from './php-dependency-parser.service';
+import { Dependency } from './types/dependency.type';
 
 describe('PhpDependencyParserService', () => {
   describe('parse', () => {

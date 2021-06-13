@@ -17,7 +17,7 @@ describe('FileParserFactory', () => {
     });
 
     it('throws error with unknown language type', () => {
-      expect(() => FileParserFactory.getParser('bla bla lang' as LanguageOption)).toThrow(
+      expect(() => FileParserFactory.getParser('unexsiting lang' as LanguageOption)).toThrow(
         new BadRequestError(ApiErrorMessage.LANGUAGE_NOT_SUPPORTED),
       );
     });

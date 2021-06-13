@@ -18,7 +18,7 @@ describe('RegistryCheckerFactory', () => {
     });
 
     it('throws error with unknown language type', () => {
-      expect(() => RegistryCheckerFactory.getService('bla bla lang' as LanguageOption)).toThrow(
+      expect(() => RegistryCheckerFactory.getService('unexisting lang' as LanguageOption)).toThrow(
         new BadRequestError(ApiErrorMessage.LANGUAGE_NOT_SUPPORTED),
       );
     });

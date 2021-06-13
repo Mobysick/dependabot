@@ -18,7 +18,7 @@ describe('DependencyParserFactory', () => {
     });
 
     it('throws error with unknown language type', () => {
-      expect(() => DependencyParserFactory.getParser('bla bla lang' as LanguageOption)).toThrow(
+      expect(() => DependencyParserFactory.getParser('unexisting lang' as LanguageOption)).toThrow(
         new BadRequestError(ApiErrorMessage.LANGUAGE_NOT_SUPPORTED),
       );
     });

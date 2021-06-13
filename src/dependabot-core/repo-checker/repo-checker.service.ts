@@ -9,7 +9,7 @@ import { LanguageOption } from './types/language-option.enum';
 
 export abstract class RepoCheckerService {
   protected user: string;
-  protected repo: string;
+  protected repoName: string;
 
   protected readonly languageOptions: DependencyLanguage[] = [
     {
@@ -24,7 +24,7 @@ export abstract class RepoCheckerService {
 
   constructor(params: CreateRepoCheckerParams) {
     this.user = params.user;
-    this.repo = params.repo;
+    this.repoName = params.repoName;
   }
 
   protected abstract getRepoUrl(): string;
@@ -35,7 +35,7 @@ export abstract class RepoCheckerService {
     console.log('Checking repository...');
     try {
       await HttpApi.get(this.getRepoUrl());
-      console.log(`Found repository: ${this.user}/${this.repo}`);
+      console.log(`Found repository: ${this.user}/${this.repoName}`);
     } catch (error) {
       throw new NotFoundError(ApiErrorMessage.REPOSITORY_NOT_FOUND);
     }

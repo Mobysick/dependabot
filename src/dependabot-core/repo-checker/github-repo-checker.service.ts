@@ -9,10 +9,10 @@ export class GithubRepoCheckerService extends RepoCheckerService {
   }
 
   getRepoUrl(): string {
-    return `https://api.github.com/repos/${this.user}/${this.repo}`;
+    return `https://api.github.com/repos/${this.user}/${this.repoName}`;
   }
 
   getPackageFileUrl(fileName: string): string {
-    return `https://api.github.com/repos/${this.user}/${this.repo}/contents/${fileName}`;
+    return `https://api.github.com/repos/${this.user}/${this.repoName}/contents/${fileName}`;
   }
 }

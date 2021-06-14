@@ -1,8 +1,8 @@
 {
-  "name": "dependabot",
+  "name": "dependabot-emre-gonen",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Simple Dependabot",
+  "author": "Emre Gonen",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

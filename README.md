@@ -41,7 +41,7 @@ Do not forget to update port number if you have changed it from env file
 | emails    | string[] | Yes       | -       | Emails to recieve daily status update for given repo.  |
 | subscribe | boolean  | No        | false   | True if you want to recieve daily status mails.        |
 
-## Examples for post body as json
+### Examples for post body as json
 
 ```json
 {
@@ -63,7 +63,7 @@ Do not forget to update port number if you have changed it from env file
 }
 ```
 
-## Curl example
+### Curl example
 
 ```bash
 curl --header "Content-Type: application/json" \
@@ -71,3 +71,25 @@ curl --header "Content-Type: application/json" \
   --data '{"repoHost": "GITHUB", "user": "Mobysick", "repoName": "php-test", "emails": ["e_gonen@hotmail.com"], "subscribe": false}' \
   http://localhost:3000/repo-check
 ```
+
+## Improvements
+
+### Comparison
+
+Right now comparison ignores semver.
+
+### Logger
+
+Used basic console logger. Might want to use womething like winston in prod.
+
+### Schedule service
+
+Used node-schedule for simplicity. Might want to use a redis-based queue e.g Bull for prod.
+
+### Possible real-word routes
+
+Might add auth routes.
+Users can save and list their repos.
+Run comparison any wanted time for a repo.
+Subscribe & unsubscribe from list.
+Change subscription interval for a given repo.

@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { DependencyParserFactory } from '../dependabot-core/dependency-parser/dependency-parser.factory';
+import { Dependency } from '../dependabot-core/dependency-parser/types/dependency.type';
 import { FileParserFactory } from '../dependabot-core/file-parser/file-parser.factory';
 import { RegistryCheckerFactory } from '../dependabot-core/registry-checker/registry-checker.factory';
+import { RegistryCheckerService } from '../dependabot-core/registry-checker/registry-checker.service';
 import { OutdatedPackage } from '../dependabot-core/registry-checker/types/outdated-package.type';
 import { RepoCheckerFactory } from '../dependabot-core/repo-checker/repo-checker.factory';
 import { RepoCheckerService } from '../dependabot-core/repo-checker/repo-checker.service';
@@ -33,7 +35,20 @@ export class DependabotCheckerService {
     const latestVersions = await Promise.all(
       dependencyList.map((dependency) => registryChecker.getLatestVersion(dependency.key)),
     );
-    // TODO: Review.
+
+    const outdatedPackages = this.comparePackages(registryChecker, dependencyList, latestVersions);
+
+    console.log(`${outdatedPackages.length} of ${dependencyList.length} dependencies are outdated`);
+    console.log(outdatedPackages);
+
+    return outdatedPackages;
+  }
+
+  public comparePackages(
+    registryChecker: RegistryCheckerService,
+    dependencyList: Dependency[],
+    latestVersions: string[],
+  ): OutdatedPackage[] {
     const outdatedPackages: OutdatedPackage[] = [];
     for (let i = 0; i < dependencyList.length; i++) {
       const dependency = dependencyList[i];
@@ -47,9 +62,6 @@ export class DependabotCheckerService {
         });
       }
     }
-
-    console.log(`${outdatedPackages.length} of ${dependencyList.length} dependencies are outdated`);
-    console.log(outdatedPackages);
 
     return outdatedPackages;
   }

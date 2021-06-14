@@ -16,7 +16,7 @@ export abstract class RegistryCheckerService {
   private formatVersion(version: string): string {
     // TODO: Review rules.
     // const operatorsToIgnore = ['~', '^', '=', '<', '>', '*', 'v'];
-    const operatorsToIgnore = ['^', '=', '>', 'v'];
+    const operatorsToIgnore = ['^', '=', '>'];
     return version
       .split('')
       .filter((char) => !operatorsToIgnore.includes(char))

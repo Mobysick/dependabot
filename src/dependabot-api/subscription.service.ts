@@ -24,8 +24,8 @@ export class SubscriptionService {
 
   private getNextScheduledMailDate(): Date {
     const date = new Date();
-    // date.setMinutes(date.getMinutes() + 1);
-    date.setDate(date.getDate() + 1);
+    // date.setMinutes(date.getMinutes() + 1); // 1 minute later from now
+    date.setDate(date.getDate() + 1); // 1 day later from now
     return date;
   }
 

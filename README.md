@@ -1,4 +1,4 @@
-# Atolye15 Dependabot
+# Simple Dependabot
 
 Simple dependabot which can check given github repo's root folder for package.json and composer.json, parse dependencies and compare them to latest version from related registry. User can subscribe with email adress to recieve daily mails about last dependency situation.
 
